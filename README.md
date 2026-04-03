@@ -106,7 +106,16 @@ export DEEPGRAM_API_KEY="your_key_here"
 
 ## Output
 
-Summaries are saved to `./output/summary-{timestamp}.md` with:
+Every summary generates **two files**:
+
+| File | Purpose | How to view |
+|------|---------|-------------|
+| `./output/summary-{timestamp}.md` | Source Markdown | VSCode, GitHub, Typora |
+| `./output/summary-{timestamp}.html` | Visual report | **Double-click → opens in browser** |
+
+The HTML file is a standalone page with embedded Mermaid JS rendering — no server or plugins needed. Just double-click to see the fully illustrated report.
+
+Both files contain:
 
 - Title and source attribution
 - Executive summary
