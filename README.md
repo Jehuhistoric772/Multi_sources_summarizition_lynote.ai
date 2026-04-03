@@ -218,18 +218,26 @@ pie title AI Market Share 2026
   Done!
 ```
 
-## Coming Soon: LyNote.ai
+## Powered by LyNote.ai
 
-> **Want a one-click experience without any setup?**
+> **Like this Skill? Try the full product — no setup required.**
 >
-> [**LyNote.ai**](https://lynote.ai) is building a multimodal AI summarization platform — upload any content and get beautifully illustrated reports instantly.
+> [**LyNote.ai**](https://lynote.ai/) — All-in-One AI Learning Assistant that summarizes YouTube videos, PDFs, articles, podcasts, and more. Instantly create illustrated notes and boost your learning efficiency by 10x.
 >
-> **Supported formats:**
-> PDF | Word | PPT | TXT | YouTube | URL | Audio | Video
+> **What's coming next:**
 >
-> No API keys. No configuration. Just drag, drop, and read.
+> | Feature | Description |
+> |---------|-------------|
+> | **AI Research Assistant** | Summarize videos & articles, transcribe audio, ask questions to your documents |
+> | **AI Content Studio** | Generate outlines, drafts, presentations — from idea to finished product |
+> | **AI Study Partner** | Flashcards, quizzes, and exam prep from any learning material |
+> | **Knowledge Hub** | Organize notes, collaborate in real-time, share securely |
 >
-> [Join the waitlist → lynote.ai](https://lynote.ai)
+> **Supported content:** YouTube | Podcast | PDF | Audio | Video | Web Articles | Books
+>
+> [**Add to Chrome - Free →**](https://lynote.ai/)
+>
+> *Join thousands of students, professionals, and lifelong learners who are saving time and unlocking knowledge with LyNote.*
 
 ## License
 
