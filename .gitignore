@@ -1,0 +1,10 @@
+# Environment variables (contains API keys)
+.env
+.env.local
+
+# Output files
+output/
+
+# OS files
+.DS_Store
+Thumbs.db
