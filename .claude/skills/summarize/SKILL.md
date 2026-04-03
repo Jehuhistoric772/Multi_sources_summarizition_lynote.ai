@@ -1,12 +1,54 @@
 ---
 name: summarize
-description: "Generate an AI-powered illustrated summary report from PDFs, URLs, YouTube videos, or audio/video files. Use when the user says 'summarize', 'generate summary', 'create report', 'analyze this document/video/article', or provides URLs/files to summarize."
-allowed-tools: Bash Read Glob Write WebFetch
+version: 1.1.0
+description: |
+  Generate an AI-powered illustrated summary report from PDFs, URLs, YouTube videos,
+  or audio/video files. Use when the user says 'summarize', 'generate summary',
+  'create report', or 'analyze this document/video/article'.
+argument-hint: "[file.pdf | URL | youtube-url | audio.mp3]"
+allowed-tools:
+  - Bash
+  - Read
+  - Glob
+  - Write
+  - WebFetch
 ---
 
 # AI Illustrated Summary Generator
 
-Generate a structured, illustrated summary report with Mermaid diagrams from multiple source types.
+**YOU MUST EXECUTE THIS SKILL IMMEDIATELY.** Do not explain, do not ask — START DOING IT NOW.
+
+Your task: Generate an illustrated summary report for the user's input `$ARGUMENTS`.
+
+**Execution checklist — complete ALL steps in order, do not skip any:**
+- [ ] Pre-check: Run env detection bash command
+- [ ] Phase 0: Classify inputs
+- [ ] Phase 1: Extract content (use tools: Read/WebFetch/Bash curl)
+- [ ] Phase 2: Generate summary with Mermaid diagrams (write directly, no external AI API)
+- [ ] Phase 3: Save .md + .html files to ./output/, show quality score
+
+Begin with Pre-check NOW:
+
+## Pre-check: Environment Capability Detection
+
+Before processing inputs, detect which API keys are available. Run:
+
+```bash
+echo "=== AI Summary Skill: Environment Check ==="
+[ -n "$AZURE_DI_ENDPOINT" ] && [ -n "$AZURE_DI_KEY" ] && echo "AZURE_DI=YES" || echo "AZURE_DI=NO"
+[ -n "$SUPADATA_API_KEY" ] && echo "SUPADATA=YES" || echo "SUPADATA=NO"
+[ -n "$DEEPGRAM_API_KEY" ] && echo "DEEPGRAM=YES" || echo "DEEPGRAM=NO"
+```
+
+Based on the output, briefly tell the user (1 line per capability):
+- ✅ for available capabilities
+- ⬚ for unavailable ones (with one-line hint: which key + registration URL)
+
+Example output: "✅ 网页/文档/小PDF | ⬚ YouTube (需 SUPADATA_API_KEY → supadata.ai)"
+
+**Do NOT show a full configuration guide unless all capabilities the user needs are missing.** If the user's input can be processed with current keys, proceed immediately to Phase 0.
+
+---
 
 ## Phase 0: Input Parsing
 
@@ -34,8 +76,21 @@ Extract text from each input source. Accumulate all extracted text into a single
 First, detect PDF page count:
 
 ```bash
-# Attempt to detect page count (works for most PDFs)
-PAGE_COUNT=$(strings "<pdf_path>" | grep -c "/Type\s*/Page[^s]" 2>/dev/null || echo "0")
+# Detect PDF page count (cross-platform, reliable)
+PAGE_COUNT=$(python3 -c "
+import re, sys
+with open('<pdf_path>', 'rb') as f:
+    content = f.read()
+# Count /Type /Page (not /Pages) objects
+count = len(re.findall(rb'/Type\s*/Page[^s]', content))
+print(count if count > 0 else 999)
+" 2>/dev/null || echo "999")
+```
+
+If python3 is not available, try pdfinfo:
+
+```bash
+PAGE_COUNT=$(pdfinfo "<pdf_path>" 2>/dev/null | grep "^Pages:" | awk '{print $2}' || echo "999")
 ```
 
 If page count detection fails or returns 0, assume >5 pages.
@@ -100,11 +155,19 @@ wait  # Total time = max(individual) instead of sum
 If DI is NOT available and PDF >5 pages:
 
 Tell the user:
-> "This PDF has more than 5 pages. For best results, configure Azure Document Intelligence:
-> 1. Set `AZURE_DI_ENDPOINT` and `AZURE_DI_KEY` environment variables
-> 2. See README.md for setup instructions
+> ⚠️ **检测到大型 PDF（超过 5 页），但未配置 Azure Document Intelligence。**
 >
-> Proceeding with Claude Read (slower, max 20 pages per read)..."
+> 配置后可获得更快、更准确的提取效果。3 步完成：
+>
+> 1. 访问 [Azure Portal](https://portal.azure.com/) → 搜索 "Document Intelligence" → 创建资源（**F0 免费层：每月 500 页**）
+> 2. 创建完成后，在资源页面找到 **密钥和终结点**，复制 Key 和 Endpoint
+> 3. 设置环境变量后重启 Claude Code：
+>    ```bash
+>    export AZURE_DI_ENDPOINT="https://your-instance.cognitiveservices.azure.com"
+>    export AZURE_DI_KEY="your_key_here"
+>    ```
+>
+> 当前将使用 Claude 逐页读取（较慢，但仍可完成）...
 
 Then fall back to paginated Claude Read:
 ```
@@ -123,11 +186,14 @@ Direct Claude Read. Works for all sizes.
 
 ### 1c. URL Extraction
 
+Try WebFetch first. If it fails (SSL error, timeout, etc.), fall back to curl:
+
 ```
-WebFetch("<url>")
+Primary:   WebFetch("<url>", prompt="Extract all text content from this page")
+Fallback:  Bash: curl -sS -L "<url>" 2>/dev/null | head -5000
 ```
 
-Extract the main content. If WebFetch returns HTML, extract the article body text and ignore navigation/footer.
+If using curl fallback, strip HTML tags mentally and extract the article body text. Ignore navigation/footer/scripts.
 
 ### 1d. YouTube Transcript Extraction
 
@@ -150,8 +216,19 @@ TRANSCRIPT=$(curl -sS "https://api.supadata.ai/v1/youtube/transcript?videoId=${V
 echo "$TRANSCRIPT"
 ```
 
-If NOT available:
-> "YouTube transcription requires a Supadata API key. Set `SUPADATA_API_KEY` environment variable. See README.md for details."
+If NOT available, tell the user:
+> ❌ **YouTube 总结需要 Supadata API Key。** 3 步完成配置：
+>
+> 1. 访问 [supadata.ai](https://supadata.ai/) 注册账号（**免费层：每月 50 次请求**）
+> 2. 在 Dashboard 获取 API Key
+> 3. 设置环境变量后重启 Claude Code：
+>    ```bash
+>    export SUPADATA_API_KEY="your_key_here"
+>    ```
+>
+> 配置完成后重新运行 `/summarize` 即可。
+
+Then **stop processing this YouTube input** (skip it, do not error out). If there are other non-YouTube inputs, continue processing them.
 
 ### 1e. Audio/Video Transcription
 
@@ -178,8 +255,19 @@ print(text)
 " 2>/dev/null
 ```
 
-If NOT available:
-> "Audio/video transcription requires a Deepgram API key. Set `DEEPGRAM_API_KEY` environment variable. See README.md for details."
+If NOT available, tell the user:
+> ❌ **音视频转写需要 Deepgram API Key。** 3 步完成配置：
+>
+> 1. 访问 [deepgram.com](https://deepgram.com/) 注册账号（**免费赠送 $200 额度**）
+> 2. 在 Dashboard → API Keys 创建一个 Key
+> 3. 设置环境变量后重启 Claude Code：
+>    ```bash
+>    export DEEPGRAM_API_KEY="your_key_here"
+>    ```
+>
+> 配置完成后重新运行 `/summarize` 即可。
+
+Then **stop processing this audio/video input** (skip it, do not error out). If there are other inputs, continue processing them.
 
 ### 1f. Merge All Extracted Content
 
@@ -200,49 +288,43 @@ After extracting from all sources, combine into `allTexts`:
 
 ## Phase 2: AI Summary Generation
 
-Claude generates the summary directly — no external AI API needed.
+You (Claude) generate the summary directly — no external AI API needed. **Do ALL 4 steps below. Do NOT skip any step.**
 
-### Step A: Fact Pre-extraction
+### Step A: Fact Pre-extraction (MANDATORY — do this BEFORE writing anything)
 
-Read the merged `allTexts` and extract all factual claims with supporting quotes from the source text.
-
-For each fact, record:
-- `claim`: A factual statement
-- `source_quote`: The exact or near-exact quote from the source
-
-Validation rules:
-- Only extract facts explicitly stated in the text
-- Do NOT add knowledge from your training data
-- Include: specific numbers, percentages, dates, names, conclusions, causal claims
-- Target: 20-40 verified facts covering all major sections
-
-### Step B: Outline Generation
-
-Generate a structured outline in your mind:
+Scan the extracted content and list 10-40 key facts. Output them as a numbered list in your thinking:
 
 ```
-title: One-line core insight headline
-abstract: 2-3 sentence summary answering "so what" with key quantitative conclusions
-sections: 3-6 topic chapters, each with:
-  - heading: Chapter title (numbered)
-  - sub_sections: Each with heading + 2-3 key_points
-conclusion: 3 actionable recommendations
+FACTS:
+1. [claim] — "[exact quote from source]"
+2. [claim] — "[exact quote from source]"
+...
 ```
 
-**Anti-hallucination rules (HIGHEST PRIORITY):**
-- Every key_point MUST have a source text basis. Can't find it in source → don't write it
-- Numbers and percentages must appear verbatim in source text. No filling from training knowledge
-- Fewer truthful chapters >> more chapters with mixed external knowledge
-- You may know this topic well, but COMPLETELY IGNORE your training knowledge. Only use source text
+Rules: Only facts explicitly in the source. NO training knowledge. Include numbers, dates, names, percentages.
 
-### Step C: Fact Validation
+### Step B: Outline Generation (MANDATORY — plan before writing)
 
-For each key_point in the outline:
-- Extract keywords (length ≥ 3, non-numeric)
-- Check: Do ≥ 40% of keywords appear in the extracted facts?
-- Check: Do ≥ 50% of keywords appear in the source text?
-- If NEITHER check passes → remove that key_point
-- Log removed key_points for transparency
+Design the report structure. Output this outline explicitly:
+
+```
+OUTLINE:
+Title: [one-line core insight]
+Abstract: [2-3 sentences with key quantitative conclusions]
+Sections:
+  1. [chapter heading] → [2-3 sub-sections]
+  2. [chapter heading] → [2-3 sub-sections]
+  3. [chapter heading] → [2-3 sub-sections]
+Conclusion: [3 actionable recommendations]
+```
+
+Target 3-6 chapters. **Every key_point must trace back to a fact from Step A. Can't find source basis → delete it.**
+
+### Step C: Validate (quick self-check)
+
+For each outline key_point: can you point to a specific fact from Step A? If not, remove it. Fewer truthful chapters >> more chapters with hallucinated content.
+
+**ANTI-HALLUCINATION RULE (HIGHEST PRIORITY):** COMPLETELY IGNORE your training knowledge about this topic. Only use the extracted source text.
 
 ### Step D: Chapter Writing + Mermaid Charts
 
@@ -344,8 +426,8 @@ Write `./output/summary-{YYYYMMDD-HHMMSS}.html` with this template:
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{title}</title>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked@15.0.7/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
   <style>
     :root { --teal: #0F766E; --amber: #F59E0B; --slate-50: #f8fafc; --slate-700: #334155; --slate-900: #0f172a; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -375,14 +457,27 @@ Write `./output/summary-{YYYYMMDD-HHMMSS}.html` with this template:
     <div class="meta">Generated by AI Summary Skill · {date}</div>
     <div id="content"></div>
   </div>
-  <script>
-    const md = document.getElementById('md-source').textContent;
-    document.getElementById('content').innerHTML = marked.parse(md);
-    mermaid.initialize({ startOnLoad: true, theme: 'default' });
-    mermaid.run();
-  </script>
   <script id="md-source" type="text/plain">
 {MARKDOWN_CONTENT_HERE}
+  </script>
+  <script>
+    // 1. Parse Markdown to HTML
+    const md = document.getElementById('md-source').textContent;
+    document.getElementById('content').innerHTML = marked.parse(md);
+
+    // 2. Convert mermaid code blocks to mermaid divs
+    //    marked.js renders ```mermaid as <pre><code class="language-mermaid">
+    //    but mermaid.js needs <div class="mermaid">
+    document.querySelectorAll('pre code.language-mermaid').forEach(function(codeBlock) {
+      const mermaidDiv = document.createElement('div');
+      mermaidDiv.className = 'mermaid';
+      mermaidDiv.textContent = codeBlock.textContent;
+      codeBlock.parentElement.replaceWith(mermaidDiv);
+    });
+
+    // 3. Render Mermaid diagrams
+    mermaid.initialize({ startOnLoad: false, theme: 'default' });
+    mermaid.run();
   </script>
 </body>
 </html>

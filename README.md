@@ -15,18 +15,35 @@ A Claude Code skill that generates illustrated, structured summary reports from 
 
 ### 1. Install
 
+**方式 A — 项目级安装（推荐）：**
+
 ```bash
-# Clone into any project
+# Clone 仓库
 git clone https://github.com/YOUR_USERNAME/ai-summary-skill.git
 
-# Copy the skill into your project's Claude Code skills directory
-cp -r ai-summary-skill/.claude YOUR_PROJECT/.claude
+# 拷贝 Skill 到你项目的 Claude Code skills 目录
+# ⚠️ 注意：是 .claude/skills/ 相对于你的 Claude Code 项目根目录
+cp -r ai-summary-skill/.claude/skills/summarize YOUR_PROJECT/.claude/skills/summarize
 ```
 
-Or install globally (available in all projects):
+> **如何确认项目根目录？** 打开 Claude Code，看底部状态栏显示的路径。
+> 例如状态栏显示 `C:\Users\you\myproject`，则拷贝到 `C:\Users\you\myproject\.claude\skills\summarize\`
+
+**方式 B — 全局安装（所有项目可用）：**
 
 ```bash
+# macOS / Linux
 cp -r ai-summary-skill/.claude/skills/summarize ~/.claude/skills/summarize
+
+# Windows (Git Bash)
+cp -r ai-summary-skill/.claude/skills/summarize "$USERPROFILE/.claude/skills/summarize"
+```
+
+**方式 C — 验证安装成功：**
+
+```bash
+# 启动 Claude Code，输入 /summarize
+# 如果能识别（自动补全出现），说明安装成功
 ```
 
 ### 2. Use
