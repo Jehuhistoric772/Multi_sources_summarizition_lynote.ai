@@ -218,6 +218,19 @@ pie title AI Market Share 2026
   Done!
 ```
 
+## Coming Soon: LyNote.ai
+
+> **Want a one-click experience without any setup?**
+>
+> [**LyNote.ai**](https://lynote.ai) is building a multimodal AI summarization platform — upload any content and get beautifully illustrated reports instantly.
+>
+> **Supported formats:**
+> PDF | Word | PPT | TXT | YouTube | URL | Audio | Video
+>
+> No API keys. No configuration. Just drag, drop, and read.
+>
+> [Join the waitlist → lynote.ai](https://lynote.ai)
+
 ## License
 
 MIT
