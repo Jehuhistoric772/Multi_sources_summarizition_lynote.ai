@@ -44,7 +44,7 @@ Based on the output, briefly tell the user (1 line per capability):
 - ✅ for available capabilities
 - ⬚ for unavailable ones (with one-line hint: which key + registration URL)
 
-Example output: "✅ 网页/文档/小PDF | ⬚ YouTube (需 SUPADATA_API_KEY → supadata.ai)"
+Example output: "✅ Web/Docs/Small PDF | ⬚ YouTube (needs SUPADATA_API_KEY → supadata.ai)"
 
 **Do NOT show a full configuration guide unless all capabilities the user needs are missing.** If the user's input can be processed with current keys, proceed immediately to Phase 0.
 
@@ -155,19 +155,19 @@ wait  # Total time = max(individual) instead of sum
 If DI is NOT available and PDF >5 pages:
 
 Tell the user:
-> ⚠️ **检测到大型 PDF（超过 5 页），但未配置 Azure Document Intelligence。**
+> ⚠️ **Large PDF detected (>5 pages), but Azure Document Intelligence is not configured.**
 >
-> 配置后可获得更快、更准确的提取效果。3 步完成：
+> For faster and more accurate extraction, set it up in 3 steps:
 >
-> 1. 访问 [Azure Portal](https://portal.azure.com/) → 搜索 "Document Intelligence" → 创建资源（**F0 免费层：每月 500 页**）
-> 2. 创建完成后，在资源页面找到 **密钥和终结点**，复制 Key 和 Endpoint
-> 3. 设置环境变量后重启 Claude Code：
+> 1. Go to [Azure Portal](https://portal.azure.com/) → search "Document Intelligence" → create resource (**F0 free tier: 500 pages/month**)
+> 2. After creation, find **Keys and Endpoint** on the resource page, copy the Key and Endpoint
+> 3. Set environment variables and restart Claude Code:
 >    ```bash
 >    export AZURE_DI_ENDPOINT="https://your-instance.cognitiveservices.azure.com"
 >    export AZURE_DI_KEY="your_key_here"
 >    ```
 >
-> 当前将使用 Claude 逐页读取（较慢，但仍可完成）...
+> Proceeding with Claude paginated read (slower, but still works)...
 
 Then fall back to paginated Claude Read:
 ```
@@ -217,16 +217,16 @@ echo "$TRANSCRIPT"
 ```
 
 If NOT available, tell the user:
-> ❌ **YouTube 总结需要 Supadata API Key。** 3 步完成配置：
+> ❌ **YouTube summarization requires a Supadata API Key.** Set it up in 3 steps:
 >
-> 1. 访问 [supadata.ai](https://supadata.ai/) 注册账号（**免费层：每月 50 次请求**）
-> 2. 在 Dashboard 获取 API Key
-> 3. 设置环境变量后重启 Claude Code：
+> 1. Sign up at [supadata.ai](https://supadata.ai/) (**free tier: 50 requests/month**)
+> 2. Get your API Key from the Dashboard
+> 3. Set the environment variable and restart Claude Code:
 >    ```bash
 >    export SUPADATA_API_KEY="your_key_here"
 >    ```
 >
-> 配置完成后重新运行 `/summarize` 即可。
+> Then re-run `/summarize` to try again.
 
 Then **stop processing this YouTube input** (skip it, do not error out). If there are other non-YouTube inputs, continue processing them.
 
@@ -256,16 +256,16 @@ print(text)
 ```
 
 If NOT available, tell the user:
-> ❌ **音视频转写需要 Deepgram API Key。** 3 步完成配置：
+> ❌ **Audio/video transcription requires a Deepgram API Key.** Set it up in 3 steps:
 >
-> 1. 访问 [deepgram.com](https://deepgram.com/) 注册账号（**免费赠送 $200 额度**）
-> 2. 在 Dashboard → API Keys 创建一个 Key
-> 3. 设置环境变量后重启 Claude Code：
+> 1. Sign up at [deepgram.com](https://deepgram.com/) (**free $200 credit**)
+> 2. Go to Dashboard → API Keys → create a new Key
+> 3. Set the environment variable and restart Claude Code:
 >    ```bash
 >    export DEEPGRAM_API_KEY="your_key_here"
 >    ```
 >
-> 配置完成后重新运行 `/summarize` 即可。
+> Then re-run `/summarize` to try again.
 
 Then **stop processing this audio/video input** (skip it, do not error out). If there are other inputs, continue processing them.
 
@@ -351,7 +351,7 @@ Generate 1 Mermaid diagram per chapter. Choose the best type:
 - `flowchart LR` — for processes/decisions
 
 Mermaid syntax rules:
-- Node IDs in English, Chinese labels in double quotes: `A["Chinese content"]`
+- Node IDs in English, non-ASCII labels in double quotes: `A["Label content"]`
 - No parentheses/brackets in node text
 - Max 10 nodes per diagram
 - Pie chart labels must use double quotes: `"Label" : value`
@@ -421,7 +421,7 @@ Write `./output/summary-{YYYYMMDD-HHMMSS}.html` with this template:
 
 ```html
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
